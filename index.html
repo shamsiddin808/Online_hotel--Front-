@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Booking API</title>
+
+  <!-- Tailwind CSS & DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .selected {
+      background-color: #6366F1; /* Active background color */
+      color: white; /* Active text color */
+      border: 2px solid #4F46E5;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-6">
+
+  <!-- Header -->
+  <h1 class="text-3xl font-bold text-center mb-8 text-blue-700">Room Booking Form</h1>
+
+  <!-- Form Section -->
+  <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+    <form id="postForm" class="flex flex-col space-y-4">
+      <!-- Hotel Names -->
+      <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">Hotel Names</h1>
+      <div id="hotelButtons" class="flex flex-wrap gap-4 justify-center"></div>
+
+      <!-- Room Number -->
+      <label class="font-semibold" for="room_number">Room Number:</label>
+      <input type="number" id="room_number" name="room_number" placeholder="Enter room number" class="input input-bordered w-full" required />
+
+      <!-- User ID -->
+      <label class="font-semibold" for="user">User ID:</label>
+      <input type="number" id="user" name="user" placeholder="Enter user ID" class="input input-bordered w-full" required />
+
+      <!-- Check-in Date -->
+      <label class="font-semibold" for="check_in">Check-in Date:</label>
+      <input type="datetime-local" id="check_in" name="check_in" class="input input-bordered w-full" required />
+
+      <!-- Check-out Date -->
+      <label class="font-semibold" for="check_out">Check-out Date:</label>
+      <input type="datetime-local" id="check_out" name="check_out" class="input input-bordered w-full" required />
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary">Book Room</button>
+    </form>
+  </div>
+
+  <!-- Response Display -->
+  <div id="response" class="mt-6 text-center text-gray-800"></div>
+
+
+
+  <!-- JavaScript -->
+
+
+
+  <script>
+    const form = document.getElementById('postForm');
+    const responseDiv = document.getElementById('response');
+    const hotelButtonsContainer = document.getElementById("hotelButtons");
+    let selectedHotel = null; // Tanlangan hotel saqlanadi
+
+    // Backenddan ma'lumot olish
+    fetch('http://127.0.0.1:8000/Users/get-hotel-data/', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Hotel tugmalarini yaratish
+      data.message.forEach(hotel => {
+        const button = document.createElement("button");
+        button.textContent = hotel.hotel_name; // Tugma matni
+        button.className = "btn btn-outline btn-primary px-4 py-2";
+
+        // Tugma bosilganda tanlangan holat
+        button.onclick = () => {
+          selectedHotel = hotel.id; // Hotel ID saqlash
+          latitude = parseFloat(hotel.latitude);  // Latitude qiymati
+          longitude = parseFloat(hotel.longitude); // Longitude qiymati
+          console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+          document.querySelectorAll("#hotelButtons button").forEach(btn => btn.classList.remove("selected"));
+          button.classList.add("selected");
+        };
+
+        hotelButtonsContainer.appendChild(button);
+      });
+    })
+    .catch(error => console.error('Fetch xatosi:', error));
+
+    // Formani yuborish
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!selectedHotel) {
+        alert("Iltimos, mehmonxonani tanlang!");
+        return;
+      }
+
+      // Form ma'lumotlarini olish
+      const payload = {
+        hotel: selectedHotel,
+        room_number: document.getElementById('room_number').value,
+        user: parseInt(document.getElementById('user').value),
+        check_in: document.getElementById('check_in').value,
+        check_out: document.getElementById('check_out').value
+      };
+
+      try {
+        // POST so'rov yuborish
+        const response = await fetch('http://0.0.0.0:8000/Users/bookingroom/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          responseDiv.innerHTML = `<strong class="text-green-600">Success!</strong> Response: <pre>${JSON.stringify(result, null, 2)}</pre>`;
+
+        } else {
+          responseDiv.innerHTML = `<strong class="text-red-600">Error:</strong> ${result.message || 'Something went wrong!'}`;
+        }
+      } catch (error) {
+        responseDiv.innerHTML = `<strong class="text-red-600">Error:</strong> ${error.message}`;
+      }
+    });
+
+  </script>
+</body>
+</html>

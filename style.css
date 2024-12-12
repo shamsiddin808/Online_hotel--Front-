@@ -1,0 +1,57 @@
+/* Asosiy container uchun o'rta o'lchamli ekranlarda */
+@media (max-width: 768px) {
+  .max-w-md {
+    max-width: 100%; /* To'liq kenglikni egallash */
+    padding: 1rem; /* Ichki bo'shliq */
+  }
+
+  h1 {
+    font-size: 1.5rem; /* Kichik sarlavha */
+  }
+
+  .input, .btn {
+    font-size: 0.875rem; /* Input va button uchun kichik shrift */
+    padding: 0.5rem 1rem; /* Ichki padding */
+  }
+
+  #hotelButtons {
+    flex-direction: column; /* Tugmalar ustma-ust joylashadi */
+    gap: 0.5rem; /* Tugmalar orasida bo'sh joy */
+  }
+}
+
+/* Juda kichik ekranlar uchun (mobil) */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.25rem; /* Yanada kichik sarlavha */
+  }
+
+  .btn {
+    padding: 0.4rem 0.8rem; /* Tugmalarni kichraytirish */
+    font-size: 0.75rem;
+  }
+
+  .input {
+    font-size: 0.75rem;
+  }
+
+  label {
+    font-size: 0.85rem; /* Yorliqlar uchun kichik shrift */
+  }
+}
+
+/* Katta ekranlar uchun (desktop) */
+@media (min-width: 1200px) {
+  .max-w-md {
+    max-width: 700px; /* Katta ekranda kengroq form */
+    padding: 2rem; /* Ichki paddingni kengaytirish */
+  }
+
+  h1 {
+    font-size: 2rem; /* Katta sarlavha */
+  }
+
+  #hotelButtons {
+    gap: 1rem; /* Tugmalar orasidagi bo'shliqni kengaytirish */
+  }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location Display</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <style>
+    /* Xarita o‘lchamini belgilash */
+    #map {
+      height: 500px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-6">
+
+  <!-- Header -->
+  <h1 class="text-3xl font-bold text-center mb-4 text-blue-700">Location Display</h1>
+
+  <!-- Input Form -->
+  <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+    <label for="latitude" class="block font-semibold mb-1">Latitude:</label>
+    <input
+      type="text"
+      id="latitude"
+      placeholder="Enter Latitude"
+      class="input input-bordered w-full mb-4 p-2 border rounded"
+    />
+
+    <label for="longitude" class="block font-semibold mb-1">Longitude:</label>
+    <input
+      type="text"
+      id="longitude"
+      placeholder="Enter Longitude"
+      class="input input-bordered w-full mb-4 p-2 border rounded"
+    />
+
+    <!-- Show Location Button -->
+    <button
+      id="showLocation"
+      class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+    >
+      Show Location
+    </button>
+  </div>
+
+  <!-- Map Section -->
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+</body>
+</html>
