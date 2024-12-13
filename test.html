@@ -1,63 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Location Display</title>
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,
+                         initial-scale=1.0">
+    <title>GeeksforGeeks</title>
+    <link rel="stylesheet"
+          href="style.css">
   <style>
-    /* Xarita o‘lchamini belgilash */
-    #map {
-      height: 500px;
-      width: 100%;
-      margin-top: 20px;
-      border-radius: 8px;
+    @import url(
+"https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    background-color: rgb(231, 231, 231);
+}
+
+header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.heading {
+    color: #003380;
+}
+
+.title {
+    font-weight: 400;
+    letter-spacing: 1.5px;
+}
+
+.container {
+    height: 600px;
+    width: 500px;
+    background-color: white;
+    box-shadow: 8px 8px 20px rgb(128, 128, 128);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn {
+    height: 60px;
+    width: 300px;
+    margin: 20px auto;
+    box-shadow: 10px 10px 30px rgb(254, 215, 188);
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.login,
+.signup {
+    font-size: 22px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    position: relative;
+    cursor: pointer;
+}
+
+.slider {
+    height: 60px;
+    width: 150px;
+    border-radius: 50px;
+    background-image: linear-gradient(to right,
+    rgb(24, 166, 255),
+    rgb(48, 73, 230));
+    position: absolute;
+    top: 20px;
+    left: 100px;
+    transition: all 0.5s ease-in-out;
+}
+
+.moveslider {
+    left: 250px;
+}
+
+.form-section {
+    height: 500px;
+    width: 1000px;
+    padding: 20px 0;
+    display: flex;
+    position: relative;
+    transition: all 0.5s ease-in-out;
+    left: 0px;
+}
+
+.form-section-move {
+    left: -500px;
+}
+
+.login-box,
+.signup-box {
+    height: 100%;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 40px;
+}
+
+.login-box {
+    gap: 50px;
+}
+
+.signup-box {
+    gap: 30px;
+}
+
+.ele {
+    height: 60px;
+    width: 400px;
+    outline: none;
+    border: none;
+    color: rgb(77, 77, 77);
+    background-color: rgb(240, 240, 240);
+    border-radius: 50px;
+    padding-left: 30px;
+    font-size: 18px;
+}
+
+.clkbtn {
+    height: 60px;
+    width: 150px;
+    border-radius: 50px;
+    background-image: linear-gradient(to right,
+    rgb(24, 166, 255),
+    rgb(48, 73, 230));
+    font-size: 22px;
+    border: none;
+    cursor: pointer;
+}
+
+/* For Responsiveness of the page */
+
+@media screen and (max-width: 650px) {
+    .container {
+        height: 600px;
+        width: 300px;
     }
+
+    .title {
+        font-size: 15px;
+    }
+
+    .btn {
+        height: 50px;
+        width: 200px;
+        margin: 20px auto;
+    }
+
+    .login,
+    .signup {
+        font-size: 19px;
+    }
+
+    .slider {
+        height: 50px;
+        width: 100px;
+        left: 50px;
+    }
+
+    .moveslider {
+        left: 150px;
+    }
+
+    .form-section {
+        height: 500px;
+        width: 600px;
+    }
+
+    .form-section-move {
+        left: -300px;
+    }
+
+    .login-box,
+    .signup-box {
+        height: 100%;
+        width: 300px;
+    }
+
+    .ele {
+        height: 50px;
+        width: 250px;
+        font-size: 15px;
+    }
+
+    .clkbtn {
+        height: 50px;
+        width: 130px;
+        font-size: 19px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .container {
+        height: 600px;
+        width: 250px;
+    }
+
+    .heading {
+        font-size: 30px;
+    }
+
+    .title {
+        font-size: 10px;
+    }
+
+    .btn {
+        height: 50px;
+        width: 200px;
+        margin: 20px auto;
+    }
+
+    .login,
+    .signup {
+        font-size: 19px;
+    }
+
+    .slider {
+        height: 50px;
+        width: 100px;
+        left: 27px;
+    }
+
+    .moveslider {
+        left: 127px;
+    }
+
+    .form-section {
+        height: 500px;
+        width: 500px;
+    }
+
+    .form-section-move {
+        left: -250px;
+    }
+
+    .login-box,
+    .signup-box {
+        height: 100%;
+        width: 250px;
+    }
+
+    .ele {
+        height: 50px;
+        width: 220px;
+        font-size: 15px;
+    }
+
+    .clkbtn {
+        height: 50px;
+        width: 130px;
+        font-size: 19px;
+    }
+}
   </style>
 </head>
-<body class="bg-gray-100 p-6">
 
-  <!-- Header -->
-  <h1 class="text-3xl font-bold text-center mb-4 text-blue-700">Location Display</h1>
+<body>
+    <header>
+        <h1 class="heading">Online Hotel</h1>
+    </header>
 
-  <!-- Input Form -->
-  <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-    <label for="latitude" class="block font-semibold mb-1">Latitude:</label>
-    <input
-      type="text"
-      id="latitude"
-      placeholder="Enter Latitude"
-      class="input input-bordered w-full mb-4 p-2 border rounded"
-    />
+    <!-- container div -->
+    <div class="container">
 
-    <label for="longitude" class="block font-semibold mb-1">Longitude:</label>
-    <input
-      type="text"
-      id="longitude"
-      placeholder="Enter Longitude"
-      class="input input-bordered w-full mb-4 p-2 border rounded"
-    />
+        <!-- upper button section to select
+             the login or signup form -->
+        <div class="slider"></div>
+        <div class="btn">
+            <button class="login">Login</button>
+            <button class="signup">Signup</button>
+        </div>
 
-    <!-- Show Location Button -->
-    <button
-      id="showLocation"
-      class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-    >
-      Show Location
-    </button>
-  </div>
+        <!-- Form section that contains the
+             login and the signup form -->
+        <div class="form-section">
 
-  <!-- Map Section -->
-  <div id="map"></div>
+            <!-- login form -->
+            <div class="login-box">
+                <input type="email"
+                       class="email ele"
+                       placeholder="youremail@email.com">
+                <input type="password"
+                       class="password ele"
+                       placeholder="password">
+                <button class="clkbtn">Login</button>
+            </div>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+            <!-- signup form -->
+            <div class="signup-box">
+                <input type="text"
+                       class="name ele"
+                       placeholder="Enter your name">
+                <input type="email"
+                       class="email ele"
+                       placeholder="youremail@email.com">
+                <input type="password"
+                       class="password ele"
+                       placeholder="password">
+                <button class="clkbtn">Signup</button>
+            </div>
+        </div>
+    </div>
+<script>
+    let signup = document.querySelector(".signup");
+    let login = document.querySelector(".login");
+    let slider = document.querySelector(".slider");
+    let formSection = document.querySelector(".form-section");
 
+    // Slider uchun animatsiya
+    signup.addEventListener("click", () => {
+        slider.classList.add("moveslider");
+        formSection.classList.add("form-section-move");
+    });
 
+    login.addEventListener("click", () => {
+        slider.classList.remove("moveslider");
+        formSection.classList.remove("form-section-move");
+    });
+
+    // Fetch orqali API ga ulanish (Login)
+    const loginButton = document.querySelector(".login-box .clkbtn");
+loginButton.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const email = document.querySelector(".login-box .email").value;
+    const password = document.querySelector(".login-box .password").value;
+
+    fetch("http://localhost:8000/Users/login/", { // API manzilini o'zgartiring
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+    // .then(response => response.json())
+    .then(data => {
+        if (data.HATO) {
+            alert(data.HATO); // Xatolikni ko'rsatish
+        } else {
+            window.location.href = "index.html"; // Foydalanuvchini index.html ga yo'naltirish
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Tarmoqda xatolik yuz berdi");
+    });
+});
+</script>
 </body>
 </html>

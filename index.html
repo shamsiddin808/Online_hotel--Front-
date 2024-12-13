@@ -59,78 +59,94 @@
 
 
   <script>
-    const form = document.getElementById('postForm');
-    const responseDiv = document.getElementById('response');
-    const hotelButtonsContainer = document.getElementById("hotelButtons");
-    let selectedHotel = null; // Tanlangan hotel saqlanadi
+const form = document.getElementById('postForm');
+const responseDiv = document.getElementById('response');
+const hotelButtonsContainer = document.getElementById("hotelButtons");
+let selectedHotel = null; // Tanlangan hotel saqlanadi
+let latitude = null; // Latitude qiymati
+let longitude = null; // Longitude qiymati
 
-    // Backenddan ma'lumot olish
-    fetch('http://127.0.0.1:8000/Users/get-hotel-data/', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(data => {
-      // Hotel tugmalarini yaratish
-      data.message.forEach(hotel => {
-        const button = document.createElement("button");
-        button.textContent = hotel.hotel_name; // Tugma matni
-        button.className = "btn btn-outline btn-primary px-4 py-2";
+// Backenddan ma'lumot olish
+fetch('http://127.0.0.1:8000/Users/get-hotel-data/', {
+  method: 'GET',
+  headers: { 'Content-Type': 'application/json' }
+})
+.then(response => response.json())
+.then(data => {
+  // Hotel tugmalarini yaratish
+  data.message.forEach(hotel => {
+    const button = document.createElement("button");
+    button.textContent = hotel.hotel_name; // Tugma matni
+    button.className = "btn btn-outline btn-primary px-4 py-2";
 
-        // Tugma bosilganda tanlangan holat
-        button.onclick = () => {
-          selectedHotel = hotel.id; // Hotel ID saqlash
-          latitude = parseFloat(hotel.latitude);  // Latitude qiymati
-          longitude = parseFloat(hotel.longitude); // Longitude qiymati
-          console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-          document.querySelectorAll("#hotelButtons button").forEach(btn => btn.classList.remove("selected"));
-          button.classList.add("selected");
-        };
+    // Tugma bosilganda tanlangan holat
+    button.onclick = () => {
+      selectedHotel = hotel.id; // Hotel ID saqlash
+      latitude = parseFloat(hotel.latitude);  // Latitude qiymati
+      longitude = parseFloat(hotel.longitude); // Longitude qiymati
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+      document.querySelectorAll("#hotelButtons button").forEach(btn => btn.classList.remove("selected"));
+      button.classList.add("selected");
+    };
 
-        hotelButtonsContainer.appendChild(button);
-      });
-    })
-    .catch(error => console.error('Fetch xatosi:', error));
+    hotelButtonsContainer.appendChild(button);
+  });
+})
+.catch(error => console.error('Fetch xatosi:', error));
 
-    // Formani yuborish
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
+// Formani yuborish
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-      if (!selectedHotel) {
-        alert("Iltimos, mehmonxonani tanlang!");
-        return;
-      }
+  if (!selectedHotel) {
+    alert("Iltimos, mehmonxonani tanlang!");
+    return;
+  }
 
-      // Form ma'lumotlarini olish
-      const payload = {
-        hotel: selectedHotel,
-        room_number: document.getElementById('room_number').value,
-        user: parseInt(document.getElementById('user').value),
-        check_in: document.getElementById('check_in').value,
-        check_out: document.getElementById('check_out').value
-      };
+  // Form ma'lumotlarini olish
+  const payload = {
+    hotel: selectedHotel,
+    room_number: document.getElementById('room_number').value,
+    user: parseInt(document.getElementById('user').value),
+    check_in: document.getElementById('check_in').value,
+    check_out: document.getElementById('check_out').value
+  };
 
-      try {
-        // POST so'rov yuborish
-        const response = await fetch('http://0.0.0.0:8000/Users/bookingroom/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          responseDiv.innerHTML = `<strong class="text-green-600">Success!</strong> Response: <pre>${JSON.stringify(result, null, 2)}</pre>`;
-
-        } else {
-          responseDiv.innerHTML = `<strong class="text-red-600">Error:</strong> ${result.message || 'Something went wrong!'}`;
-        }
-      } catch (error) {
-        responseDiv.innerHTML = `<strong class="text-red-600">Error:</strong> ${error.message}`;
-      }
+  try {
+    // POST so'rov yuborish
+    const response = await fetch('http://0.0.0.0:8000/Users/bookingroom/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
 
+    const result = await response.json();
+
+    if (response.ok) {
+      // Lokatsiya uchun Yandex Maps yoki Google Maps linki
+      const yandexLink = `https://yandex.com/maps/?ll=${longitude},${latitude}&z=16`;
+      const googleLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+      // Formani yashirish
+      form.style.display = "none";
+      hotelButtonsContainer.style.display = "none";
+
+      // Lokatsiya tugmalarini chiqarish
+      responseDiv.innerHTML = `
+        <strong class="text-green-600 text-lg">Success! Xona bron qilindi.</strong>
+        <div class="mt-4 space-y-2">
+          <a href="${googleLink}" target="_blank" class="btn btn-info w-full">
+            Google Maps'da ko'rish
+          </a>
+        </div>
+      `;
+    } else {
+      responseDiv.innerHTML = `<strong class="text-red-600">Error:</strong> ${result.message || 'Something went wrong!'}`;
+    }
+  } catch (error) {
+    responseDiv.innerHTML = `<strong class="text-red-600">Error:</strong> ${error.message}`;
+  }
+});
   </script>
 </body>
 </html>
