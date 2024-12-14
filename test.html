@@ -278,7 +278,7 @@ header {
   </style>
 </head>
 
-<body>
+ <body>
     <header>
         <h1 class="heading">Online Hotel</h1>
     </header>
@@ -363,6 +363,7 @@ loginButton.addEventListener("click", (e) => {
     .then(data => {
         if (data.HATO) {
             alert(data.HATO); // Xatolikni ko'rsatish
+
         } else {
             window.location.href = "index.html"; // Foydalanuvchini index.html ga yo'naltirish
         }
